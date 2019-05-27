@@ -20,5 +20,9 @@
 	<hr />
 	<p>${article.contentHtml }</p>
 	<hr />
+		<p>
+	<span><a href="./app/article/revise?articleId=${article.articleId }&userId=${article.userId }">수정</a></span> 
+	<span><a href="./app/article/delete?articleId=${article.articleId }&userId=${article.userId }">삭제</a></span> 
+	</p>
 </body>
 </html>

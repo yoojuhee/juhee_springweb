@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 public class ArticleController {
@@ -55,11 +56,6 @@ public class ArticleController {
 	 */
 	@GetMapping("/article/addForm")
 	public String articleAddForm(HttpSession session) {
-		Object memberObj = session.getAttribute("MEMBER");
-		if (memberObj == null)
-			// 세션에 MEMBER가 없을 경우 로그인 화면으로
-			return "login/loginForm";
-
 		return "article/addForm";
 	}
 
@@ -67,17 +63,35 @@ public class ArticleController {
 	 * 글 등록
 	 */
 	@PostMapping("/article/add")
-	public String articleAdd(Article article, HttpSession session) {
-		// 세션에 MEMBER가 없을 경우 로그인 화면으로
-		Object memberObj = session.getAttribute("MEMBER");
-		if (memberObj == null)
-			// 세션에 MEMBER가 없을 경우 로그인 화면으로
-			return "login/loginForm";
-
-		Member member = (Member) memberObj;
+	public String articleAdd(Article article,
+			@SessionAttribute("MEMBER") Member member) {
 		article.setUserId(member.getMemberId());
 		article.setName(member.getName());
 		articleDao.addArticle(article);
 		return "redirect:/app/article/list";
 	}
-}
+	
+	@GetMapping("/article/update")
+	public String update(Article article, 
+			@SessionAttribute("MEMBER") Member member) {
+		article.setArticleId(member.getMemberId());
+		article.setName(member.getName());
+		articleDao.addArticle(article);
+		return "redirect:/app/article/list";
+	}
+	
+	@GetMapping("/article/delete")
+	public String delete(@RequestParam("articleId") String articleId,
+			@RequestParam("userId") String userId,
+			@SessionAttribute("MEMBER") Member member) {
+		if(userId.equals(member.getMemberId())) {
+			articleDao.deleteArticle(articleId);
+			return "redirect:/app/article/list";
+		}
+		else 
+			return "/article/fail";
+			
+		}
+	}
+			
+					
