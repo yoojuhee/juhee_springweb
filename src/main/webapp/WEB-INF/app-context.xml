@@ -17,14 +17,13 @@
 	<mvc:annotation-driven />
 	<context:component-scan base-package="org.juhee" />
 
-	
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/member/**" />
 			<mvc:mapping path="/article/add*" />
+			<mvc:mapping path="/article/update*" />
 			<mvc:mapping path="/article/delete" />
-			<mvc:mapping path="/article/revise" />
-			<mvc:mapping path="/article/update" />
+			<mvc:mapping path="/letter/**" />
 			<bean class="org.juhee.book.chap13.AuthCheckInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>

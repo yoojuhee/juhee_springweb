@@ -7,9 +7,7 @@
 <title>회원 목록</title>
 </head>
 <body>
-	<!-- 메뉴 -->
 	<%@ include file="/WEB-INF/jsp/header.jsp"%>
-	<!-- //메뉴 -->
 	<h2>회원 목록</h2>
 	<p>전체 ${totalCount }건</p>
 	<form action="./app/members">
@@ -24,6 +22,7 @@
 				<td>이메일</td>
 				<td>이름</td>
 				<td>등록일시</td>
+				<td></td>
 			</tr>
 		</thead>
 		<tbody>
@@ -33,6 +32,8 @@
 					<td>${member.email }</td>
 					<td>${member.name }</td>
 					<td>${member.cdate }</td>
+					<td><a
+						href="./app/letter/addForm?receiverId=${member.memberId }&receiverName=${member.name }">편지쓰기</a></td>
 				</tr>
 			</c:forEach>
 		</tbody>
