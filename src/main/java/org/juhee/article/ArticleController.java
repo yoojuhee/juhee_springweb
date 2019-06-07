@@ -2,8 +2,6 @@ package org.juhee.article;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.juhee.book.chap11.Member;
@@ -21,7 +19,7 @@ public class ArticleController {
 	@Autowired
 	ArticleDao articleDao;
 
-	Logger logger = LogManager.getLogger();
+	static final Logger logger = LogManager.getLogger();
 
 	/**
 	 * 글 목록
@@ -54,28 +52,30 @@ public class ArticleController {
 	/**
 	 * 글 등록 화면
 	 */
-	@GetMapping("/article/addForm")
-	public String articleAddForm(HttpSession session) {
-		return "article/addForm";
-	}
+	@GetMapping("/article/s/form")
+	public void form() {
 
-	/**
-	 * 글 등록
-	 */
-	@PostMapping("/article/add")
-	public String articleAdd(Article article,
-			@SessionAttribute("MEMBER") Member member) {
-		article.setUserId(member.getMemberId());
-		article.setName(member.getName());
-		articleDao.addArticle(article);
-		return "redirect:/app/article/list";
 	}
 	
 	/**
+	 * 글 등록
+	 */
+	@PostMapping("/article/s/form")
+	public String articleAdd(Article article,
+			@SessionAttribute("MEMBER") Member member) {
+		// 세션의 멤버 정보를 글의 등록자 정보에 넣는다.  
+		article.setUserId(member.getMemberId());
+		article.setName(member.getName());
+		
+		articleDao.addArticle(article);
+		return "redirect:/app/article/list";
+	}
+
+	/**
 	 * 글 수정 화면
 	 */
-	@GetMapping("/article/updateForm")
-	public void updateForm(@RequestParam("articleId") String articleId,
+	@GetMapping("/article/s/edit")
+	public void edit(@RequestParam("articleId") String articleId,
 			@SessionAttribute("MEMBER") Member member, Model model) {
 		Article article = articleDao.getArticle(articleId);
 
@@ -87,11 +87,10 @@ public class ArticleController {
 		model.addAttribute("article", article);
 	}
 
-	
 	/**
 	 * 글 수정
 	 */
-	@PostMapping("/article/update")
+	@PostMapping("/article/s/edit")
 	public String update(Article article,
 			@SessionAttribute("MEMBER") Member member) {
 		article.setUserId(member.getMemberId());
@@ -108,7 +107,7 @@ public class ArticleController {
 	/**
 	 * 글 삭제
 	 */
-	@GetMapping("/article/delete")
+	@GetMapping("/article/s/delete")
 	public String delete(@RequestParam("articleId") String articleId,
 			@SessionAttribute("MEMBER") Member member) {
 		int updatedRows = articleDao.deleteArticle(articleId,
@@ -121,8 +120,5 @@ public class ArticleController {
 
 		logger.debug("글을 삭제했습니다. articleId={}", articleId);
 		return "redirect:/app/article/list";
+	}
 }
-		}
-	
-			
-					

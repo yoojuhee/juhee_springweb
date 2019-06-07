@@ -1,7 +1,7 @@
 package org.juhee.letter;
 
 /**
- * @author juhee
+ * @author jacob
  *
  */
 public class Letter {
